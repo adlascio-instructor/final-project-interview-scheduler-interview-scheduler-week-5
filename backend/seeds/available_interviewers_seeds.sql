@@ -1,0 +1,1 @@
+INSERT INTO Available_Interviewers (id, interviewer_id, day_id) VALUES (1, 1, 1);
