@@ -1,6 +1,9 @@
+const {dbCredentials}=require("../helpers/dbconfig")
+
+
+
 const  showInterviews=(req,res)=>{
-    console.log(req.params)
-    res.send("hello");
+    res.send(console.log(dbCredentials))
 }
 
 module.exports={

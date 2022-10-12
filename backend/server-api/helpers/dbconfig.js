@@ -1,4 +1,4 @@
-const { Pool }= require ("pg");
+require('dotenv').config()
 
 const dbCredentials = {
       user: process.env.DB_USER,
