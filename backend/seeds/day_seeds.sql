@@ -1,1 +1,1 @@
-INSERT INTO Day (id, name) VALUES (1, "Monday");
+INSERT INTO Day (id, name) VALUES (1, 'Monday');

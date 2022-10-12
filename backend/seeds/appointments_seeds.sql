@@ -1,1 +1,1 @@
-INSERT INTO Appointments (id, time, day_id) VALUES (1, "4:00", 2022-10-07);
+INSERT INTO Appointments (id, time, day_id) VALUES (1,'4:00PM', 1);
