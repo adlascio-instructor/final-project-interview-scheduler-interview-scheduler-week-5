@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const port = 8000;
-const apiRoute=require('./backend/server-api/routes/apiRoute')
+const apiRoute=require('./backend/server-api/routes/interviewsRoute')
 
 app.use(express.urlencoded({ extended: true }));
 

@@ -7,6 +7,5 @@ const dbCredentials = {
       password: process.env.DB_PASSWORD,
       port: process.env.DB_PORT,
 };
-
-
 module.exports = { dbCredentials };
+
