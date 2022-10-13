@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import axios from "axios"
 import "./App.scss";
 
 import DayList from "./components/DayList";
@@ -8,6 +8,16 @@ import daysData from "./components/__mocks__/days.json";
 import appointmentsData from "./components/__mocks__/appointments.json";
 
 export default function Application() {
+
+  const getNotes = async () => {
+    try{const res = await axios.get(`http://localhost:8000/interviews/1`);
+    const notes = await res.data;
+    console.log(notes);
+    return notes}catch(e){console.log(e)
+    }};
+    getNotes()
+
+
   const [day, setDay] = useState("Monday");
   const [days, setDays] = useState(daysData);
   const [appointments, setAppointments] = useState(appointmentsData);
