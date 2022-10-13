@@ -10,8 +10,8 @@ import appointmentsData from "./components/__mocks__/appointments.json";
 export default function Application() {
 
   const getNotes = async () => {
-    try{const res = await axios.get(`http://localhost:8000/`);
-    const notes = await res.data.results;
+    try{const res = await axios.get(`http://localhost:8000/interviews/1`);
+    const notes = await res.data;
     console.log(notes);
     return notes}catch(e){console.log(e)
     }};
