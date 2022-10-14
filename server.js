@@ -28,6 +28,7 @@ server.listen(port, () => console.log(`Server is running on port ${port}`));
 // Web sockets
 
 io.on("connection",socket=>{
-    console.log(socket.id)
+    socket.on("appointment-monday",(data)=>{
+        console.log(data)
+    })
 })
-
