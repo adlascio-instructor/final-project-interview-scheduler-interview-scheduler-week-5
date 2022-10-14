@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios"
 import "./App.scss";
-
+import {io} from "socket.io-client"
 import DayList from "./components/DayList";
 import Appointment from "./components/Appointment";
 //import daysData from "./components/__mocks__/days.json";
@@ -9,6 +9,11 @@ import appointmentsData from "./components/__mocks__/appointments.json";
 
 export default function Application() {
 
+  // Web sockets test
+  
+  const socket=io("http://localhost:8000",{ transports : ['websocket'] })
+
+// API test
   const getNotes = async () => {
     try{const res = await axios.get(`http://localhost:8000/interviews/1`);
     const notes = await res.data;
