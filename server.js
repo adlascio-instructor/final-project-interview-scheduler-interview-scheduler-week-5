@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const port = 8000;
 const interviewsRoute=require('./backend/server-api/routes/interviewsRoute')
+const apiRouteDay=require('./backend/server-api/routes/dayRoute')
 const cors = require('cors');
 // Require for the socket.io
 const http=require('http')
@@ -18,6 +19,8 @@ app.use(cors({
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
 
+
+app.use('/',apiRouteDay)
 app.use('/interviews',interviewsRoute);
 
 server.listen(port, () => console.log(`Server is running on port ${port}`));
@@ -27,3 +30,4 @@ server.listen(port, () => console.log(`Server is running on port ${port}`));
 io.on("connection",socket=>{
     console.log(socket.id)
 })
+
