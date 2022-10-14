@@ -3,6 +3,6 @@ const router=express.Router();
 const{showInterviews}=require("../controllers/interviewsController")
 
 
-router.get("/interviews/:id",showInterviews);
+router.get("/:id",showInterviews);
 
 module.exports=router

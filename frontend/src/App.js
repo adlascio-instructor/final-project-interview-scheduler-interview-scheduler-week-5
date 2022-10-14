@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState,useEffect } from "react";
 import axios from "axios"
 import "./App.scss";
-
+import {io} from "socket.io-client"
 import DayList from "./components/DayList";
 import Appointment from "./components/Appointment";
 //import daysData from "./components/__mocks__/days.json";
@@ -9,6 +9,10 @@ import appointmentsData from "./components/__mocks__/appointments.json";
 
 export default function Application() {
 
+  // Web sockets test
+  const socket=io("http://localhost:8000",{ transports : ['websocket'] })
+
+// API test
   const getNotes = async () => {
     try{const res = await axios.get(`http://localhost:8000/interviews/1`);
     const notes = await res.data;
@@ -17,7 +21,7 @@ export default function Application() {
     }};
     getNotes()
 
-
+useEffect(()=>{
   const getDays = async () => {
     try{const res = await axios.get(`http://localhost:8000/days`);
     const days =  await res.data;
@@ -25,12 +29,16 @@ export default function Application() {
     // setDays(days);
     return days}catch(e){console.log(e)
   }};
- 
-  const daysData = getDays();
-    // useffect
+  const daysData =  Promise.resolve(getDays())
+  daysData.then(value=>{
+    setDays(value)
+    console.log(days)
+  })
+},[])
 
+ 
   const [day, setDay] = useState("Monday");
-  const [days, setDays] = useState(daysData);
+  const [days, setDays] = useState({});
   
   const [appointments, setAppointments] = useState(appointmentsData);
 
@@ -46,6 +54,9 @@ export default function Application() {
         ...prev,
         [id]: appointment,
       };
+      
+      // Web sockets
+      socket.emit("appointment-monday",appointments)
       return appointments;
     });
     if (!isEdit) {

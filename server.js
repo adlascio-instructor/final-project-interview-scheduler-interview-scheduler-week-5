@@ -1,19 +1,35 @@
 const express = require("express");
 const app = express();
 const port = 8000;
-const apiRoute=require('./backend/server-api/routes/interviewsRoute')
+const interviewsRoute=require('./backend/server-api/routes/interviewsRoute')
 const apiRouteDay=require('./backend/server-api/routes/dayRoute')
 const cors = require('cors');
-app.use(cors())
-// const io=require('socket.io')(3000)
+// Require for the socket.io
+const http=require('http')
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
 
-// io.on("connection",socket=>{
-//     console.log(socket.id)
-// })
+app.use(cors({
+    origin:"*",
+    credentials:true,
+}
+))
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
 
-app.use('/',apiRoute)
+
 app.use('/',apiRouteDay)
 
-app.listen(port, () => console.log(`Server is running on port ${port}`));
+app.use('/interviews',interviewsRoute);
+
+server.listen(port, () => console.log(`Server is running on port ${port}`));
+
+// Web sockets
+
+io.on("connection",socket=>{
+    socket.on("appointment-monday",(data)=>{
+        console.log(data)
+    })
+})
