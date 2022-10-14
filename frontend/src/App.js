@@ -10,7 +10,6 @@ import appointmentsData from "./components/__mocks__/appointments.json";
 export default function Application() {
 
   // Web sockets test
-  
   const socket=io("http://localhost:8000",{ transports : ['websocket'] })
 
 // API test
@@ -49,6 +48,9 @@ export default function Application() {
         ...prev,
         [id]: appointment,
       };
+      
+      // Web sockets
+      socket.emit("appointment-monday",appointments)
       return appointments;
     });
     if (!isEdit) {

@@ -7,13 +7,14 @@ const Form = (props) => {
   const [interviewer, setInterviewer] = React.useState(
     props.interviewer || null
   );
+
   const reset = () => {
     setName("");
     setInterviewer(null);
   };
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (!name || !interviewer) return;
+    if (!name || !interviewer)return
     props.onSave(name, interviewer);
   };
   const cancel = () => {

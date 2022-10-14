@@ -41,6 +41,7 @@ const Appointment = (props) => {
           />
         ) : edit ? (
           <Form
+
             student={props.interview.student}
             interviewer={props.interview.interviewer}
             interviewers={interviewers}
