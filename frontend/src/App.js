@@ -4,7 +4,7 @@ import "./App.scss";
 
 import DayList from "./components/DayList";
 import Appointment from "./components/Appointment";
-import daysData from "./components/__mocks__/days.json";
+//import daysData from "./components/__mocks__/days.json";
 import appointmentsData from "./components/__mocks__/appointments.json";
 
 export default function Application() {
@@ -18,9 +18,20 @@ export default function Application() {
     getNotes()
 
 
+  const getDays = async () => {
+    try{const res = await axios.get(`http://localhost:8000/days`);
+    const days =  await res.data;
+    console.log(days);
+    return days}catch(e){console.log(e)
+  }};
+ 
+  const daysData =  getDays();
+ 
   const [day, setDay] = useState("Monday");
   const [days, setDays] = useState(daysData);
+  
   const [appointments, setAppointments] = useState(appointmentsData);
+
   function bookInterview(id, interview) {
     console.log(id, interview);
     const isEdit = appointments[id].interview;

@@ -3,6 +3,6 @@ const router=express.Router();
 const{showDays}=require("../controllers/daysController")
 
 
-router.get("/days/:id",showDays);
+router.get("/days",showDays);
 
 module.exports=router

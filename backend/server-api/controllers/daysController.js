@@ -1,15 +1,25 @@
-const {dbCredentials}=require("../helpers/dbconfig")
+const {dbCredentials}=require("../helpers/dbconfig");
 const {Pool}=require("pg");
 
-
 const  showDays=(req,res)=>{
+
+    res.setHeader("Access-Control-Allow-Origin", "*")
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.setHeader("Access-Control-Max-Age", "1800");
+    res.setHeader("Access-Control-Allow-Headers", "content-type");
+    res.setHeader( "Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, PATCH, OPTIONS" ); 
+    
     const pool = new Pool(dbCredentials);
-    pool.query("SELECT d.id, d.name, count(a.day_id) as nrAppointments  FROM day d LEFT JOIN appointments a on d.id = a.day_id  GROUP BY d.id, d.name  ORDER BY d.id")
+    pool.query("SELECT  a.day_id as id, d.name as name,  count(CASE WHEN i.id  is null THEN  a.day_id END) as spots  FROM day d  LEFT JOIN appointments a on d.id = a.day_id  LEFT JOIN interviews i on a.id = i.appointment_id GROUP BY a.day_id, d.name  ORDER BY a.day_id")
     .then((result)=>result.rows)
-    .then((days)=>res.json(days))
+    .then((days)=> res.json(days))
     .catch((err)=>console.log(err))
     .finally(()=>pool.end);
 }
+
+//days.forEach( id => {
+//    vDays[id.name] = id 
+//})
 
 module.exports={
     showDays
