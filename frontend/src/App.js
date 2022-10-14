@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios"
 import "./App.scss";
 
@@ -22,11 +22,13 @@ export default function Application() {
     try{const res = await axios.get(`http://localhost:8000/days`);
     const days =  await res.data;
     console.log(days);
+    // setDays(days);
     return days}catch(e){console.log(e)
   }};
  
-  const daysData =  getDays();
- 
+  const daysData = getDays();
+    // useffect
+
   const [day, setDay] = useState("Monday");
   const [days, setDays] = useState(daysData);
   
