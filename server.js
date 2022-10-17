@@ -29,4 +29,15 @@ server.listen(port, () => console.log(`Server is running on port ${port}`));
 
 // Web sockets
 
-io.on("connection",testing)
+io.on("connection", (socket) => {
+    console.log(`User connected: ${socket.id}`);
+
+    socket.on("new_appointment", (data) => {
+        console.log(`socket`, data);
+        socket.broadcast.emit(`create`, data);
+    })
+    socket.on(`delete_appointment`, (data) => {
+        console.log(`delete_target`, data);
+        socket.broadcast.emit(`delete`, data);
+    })
+})

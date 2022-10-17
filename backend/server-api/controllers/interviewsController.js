@@ -86,12 +86,14 @@ const  showInterviews=(req,res)=>{
     const student = req.params.student;
     const interviewerID = parseInt(req.params.interviewerID);
     const appointmentID = parseInt(req.params.appointmentID);
-
+    socket.on("edit_interview", () => {
     pool.query("UPDATE Interview SET student = $2, interviewer_id= $3, appointment_id= $4  WHERE id= $1", [interviewID, student, interviewerID, appointmentID])
     .then((result)=>result.rows)
      .then(()=> showInterviews())
      .catch((err)=>console.log(err))
      .finally(()=>pool.end);
+    })
+    socket.broadcast.emit("interview_edited")
     }
  
 
