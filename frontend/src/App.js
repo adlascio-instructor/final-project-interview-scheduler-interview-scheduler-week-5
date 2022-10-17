@@ -1,43 +1,87 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import axios from "axios"
 import "./App.scss";
 import {io} from "socket.io-client"
 import DayList from "./components/DayList";
 import Appointment from "./components/Appointment";
 //import daysData from "./components/__mocks__/days.json";
-import appointmentsData from "./components/__mocks__/appointments.json";
+//import appointmentsData from "./components/__mocks__/appointments.json";
+
 
 export default function Application() {
 
-  // Web sockets test
+  let appointmentsData = {};
+  let dayID = 1 ;
+ 
+   // Web sockets test
   const socket=io("http://localhost:8000",{ transports : ['websocket'] })
+  
+  function RefreshDay(day){
+   console.log(day)
+
+   switch (day){
+   case "Monday":
+    dayID = 1
+    break;
+   case "Tuesday":
+     dayID = 2
+      break;
+   case "Wednesday":
+     dayID = 3
+     break;
+   case "Thursday":
+     dayID = 4
+      break;
+   case "Friday":
+     dayID = 5
+      break;
+  }
+
+
+}
 
 // API test
-  const getNotes = async () => {
-    try{const res = await axios.get(`http://localhost:8000/interviews/1`);
-    const notes = await res.data;
-    console.log(notes);
-    return notes}catch(e){console.log(e)
+
+useEffect(()=>{
+  const getInterviews = async () => {
+    try{const res = await axios.get(`http://localhost:8000/interviews/${dayID}`);
+    const interviews = await res.data;
+   // console.log(interviews);
+    return interviews }
+    catch(e){console.log(e)
     }};
-    getNotes()
+
+    const interviewsData =  Promise.resolve(getInterviews())
+    interviewsData.then(value=>{
+      setAppointments(value)
+      appointmentsData = value;
+      console.log(appointmentsData)
+    })
+  },[])
 
 
+  
+
+useEffect(()=>{
   const getDays = async () => {
     try{const res = await axios.get(`http://localhost:8000/days`);
     const days =  await res.data;
-    console.log(days);
+ //   console.log(days);
     return days}catch(e){console.log(e)
   }};
- 
-  const daysData =  getDays();
- 
-  const [day, setDay] = useState("Monday");
-  const [days, setDays] = useState(daysData);
-  
+  const daysData =  Promise.resolve(getDays())
+  daysData.then(value=>{
+    setDays(value)
+    console.log(days)
+  })
+},[])
+  const [day, setDay]  = useState("Monday");
+  const [days, setDays] = useState({});
   const [appointments, setAppointments] = useState(appointmentsData);
+  RefreshDay(day);
 
   function bookInterview(id, interview) {
-    console.log(id, interview);
+    console.log(id, interview);    
     const isEdit = appointments[id].interview;
     setAppointments((prev) => {
       const appointment = {
@@ -67,6 +111,7 @@ export default function Application() {
       });
     }
   }
+  
   function cancelInterview(id) {
     setAppointments((prev) => {
       const updatedAppointment = {

@@ -21,6 +21,7 @@ app.use(express.json())
 
 
 app.use('/',apiRouteDay)
+
 app.use('/interviews',interviewsRoute);
 
 server.listen(port, () => console.log(`Server is running on port ${port}`));
