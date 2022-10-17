@@ -113,7 +113,12 @@ const  showInterviews=(req,res)=>{
         .catch((err)=>console.log(err))
         .finally(()=>pool.end);
         }
-     
+        
+     const testing=(socket)=>{
+        socket.on("appointments",(data)=>{
+            console.log(data)
+        })
+     }
     
 
     module.exports={
@@ -121,6 +126,7 @@ const  showInterviews=(req,res)=>{
         addInterview,
         editInterview,
         deleteInterview,
+        testing
     }
 
     
