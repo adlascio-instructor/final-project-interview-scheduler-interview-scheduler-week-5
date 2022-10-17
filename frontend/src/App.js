@@ -7,26 +7,35 @@ import Appointment from "./components/Appointment";
 //import daysData from "./components/__mocks__/days.json";
 import appointmentsData from "./components/__mocks__/appointments.json";
 
+
 export default function Application() {
 
   // Web sockets test
   const socket=io("http://localhost:8000",{ transports : ['websocket'] })
 
 // API test
-  const getNotes = async () => {
+
+useEffect(()=>{
+  const getInterviews = async () => {
     try{const res = await axios.get(`http://localhost:8000/interviews/1`);
-    const notes = await res.data;
-    console.log(notes);
-    return notes}catch(e){console.log(e)
+    const interviews = await res.data;
+    console.log(interviews);
+    return interviews}catch(e){console.log(e)
     }};
-    getNotes()
+
+    const interviewsData =  Promise.resolve(getInterviews())
+    interviewsData.then(value=>{
+      setAppointments(value)
+      console.log(interviews)
+    })
+  },[])
+
 
 useEffect(()=>{
   const getDays = async () => {
     try{const res = await axios.get(`http://localhost:8000/days`);
     const days =  await res.data;
     console.log(days);
-    // setDays(days);
     return days}catch(e){console.log(e)
   }};
   const daysData =  Promise.resolve(getDays())

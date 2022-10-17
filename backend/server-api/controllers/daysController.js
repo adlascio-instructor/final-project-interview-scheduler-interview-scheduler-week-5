@@ -32,9 +32,6 @@ const  showDays=(req,res)=>{
     .finally(()=>pool.end);
 }
 
-//days.forEach( id => {
-//    vDays[id.name] = id 
-//})
 
 module.exports={
     showDays
