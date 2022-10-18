@@ -10,11 +10,13 @@ import Appointment from "./components/Appointment";
 
 export default function Application() {
   const [day, setDay]  = useState("Monday");
-
+  const [days, setDays] = useState({});
   let appointmentsData = {};
+  const [appointments, setAppointments] = useState(appointmentsData);
+
  
    // Web sockets test
-  const socket=io("http://localhost:8000",{ transports : ['websocket'] })
+  const socket=io("http://localhost:8005",{ transports : ['websocket'] })
   
   function RefreshDay(day){
     const def=1
@@ -25,16 +27,12 @@ export default function Application() {
     Thursday:4,
     Friday:5
     }
-   return days[day] ?? def
+   return(days[day] ?? def)
 }
-
-// API test
-
 useEffect(()=>{
-
   const getInterviews = async () => {
     const dayID=RefreshDay(day)
-    try{const res = await axios.get(`http://localhost:8000/interviews/${dayID}`);
+    try{const res = await axios.get(`http://localhost:8005/interviews/${dayID}`);
     const interviews = await res.data;
    // console.log(interviews);
     return interviews }
@@ -48,12 +46,9 @@ useEffect(()=>{
     })
   },[day])
 
-
-  
-
 useEffect(()=>{
   const getDays = async () => {
-    try{const res = await axios.get(`http://localhost:8000/days`);
+    try{const res = await axios.get(`http://localhost:8005/days`);
     const days =  await res.data;
  //   console.log(days);
     return days}catch(e){console.log(e)
@@ -66,10 +61,6 @@ useEffect(()=>{
 },[])
 
 
-  const [days, setDays] = useState({});
-  const [appointments, setAppointments] = useState(appointmentsData);
- 
-
   function bookInterview(id, interview) {
     console.log(id, interview);    
     const isEdit = appointments[id].interview;
@@ -81,11 +72,12 @@ useEffect(()=>{
       const appointments = {
         ...prev,
         [id]: appointment,
-
       };
-      
       // Web sockets
-      socket.emit("appointments",appointments)
+      if(isEdit){socket.emit("edit",appointments)}
+      else{socket.emit("appointments",appointments)}
+
+
       return appointments;
     });
     if (!isEdit) {
@@ -113,7 +105,10 @@ useEffect(()=>{
         ...prev,
         [id]: updatedAppointment,
       };
+      console.log(appointments)
+      socket.emit("delete",appointments)
       return appointments;
+
     });
     setDays((prev) => {
       const updatedDay = {
