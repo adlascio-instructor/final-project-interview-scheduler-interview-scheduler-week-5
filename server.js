@@ -9,7 +9,7 @@ const http=require('http')
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
-const{testing}=require('./backend/server-api/controllers/interviewsController')
+const{addInterview}=require('./backend/server-api/controllers/interviewsController')
 
 app.use(cors({
     origin:"*",
@@ -29,4 +29,4 @@ server.listen(port, () => console.log(`Server is running on port ${port}`));
 
 // Web sockets
 
-io.on("connection",testing)
+io.on("connection",addInterview )
