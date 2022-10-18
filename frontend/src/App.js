@@ -9,55 +9,44 @@ import Appointment from "./components/Appointment";
 
 
 export default function Application() {
+  const [day, setDay]  = useState("Monday");
 
   let appointmentsData = {};
-  let dayID = 1 ;
  
    // Web sockets test
   const socket=io("http://localhost:8000",{ transports : ['websocket'] })
   
   function RefreshDay(day){
-   console.log(day)
-
-   switch (day){
-   case "Monday":
-    dayID = 1
-    break;
-   case "Tuesday":
-     dayID = 2
-      break;
-   case "Wednesday":
-     dayID = 3
-     break;
-   case "Thursday":
-     dayID = 4
-      break;
-   case "Friday":
-     dayID = 5
-      break;
-  }
-
-
+    const def=1
+    const days={
+    Monday:1,
+    Tuesday:2,
+    Wednesday:3,
+    Thursday:4,
+    Friday:5
+    }
+   return days[day] ?? def
 }
 
 // API test
 
 useEffect(()=>{
+
   const getInterviews = async () => {
+    const dayID=RefreshDay(day)
     try{const res = await axios.get(`http://localhost:8000/interviews/${dayID}`);
     const interviews = await res.data;
    // console.log(interviews);
     return interviews }
     catch(e){console.log(e)
     }};
-
     const interviewsData =  Promise.resolve(getInterviews())
     interviewsData.then(value=>{
       setAppointments(value)
       appointmentsData = value;
       console.log(appointmentsData)
     })
-  },[])
+  },[day])
 
 
   
@@ -75,10 +64,11 @@ useEffect(()=>{
     console.log(days)
   })
 },[])
-  const [day, setDay]  = useState("Monday");
+
+
   const [days, setDays] = useState({});
   const [appointments, setAppointments] = useState(appointmentsData);
-  RefreshDay(day);
+ 
 
   function bookInterview(id, interview) {
     console.log(id, interview);    
@@ -91,10 +81,11 @@ useEffect(()=>{
       const appointments = {
         ...prev,
         [id]: appointment,
+
       };
       
       // Web sockets
-      socket.emit("appointment-monday",appointments)
+      socket.emit("appointments",appointments)
       return appointments;
     });
     if (!isEdit) {
