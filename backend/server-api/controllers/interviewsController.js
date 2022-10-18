@@ -53,22 +53,28 @@ const  showInterviews=(req,res)=>{
 
 //=============================================
 
-   const  addInterview=(req,res)=>{
-    res.setHeader("Access-Control-Allow-Origin", "*")
-    res.setHeader("Access-Control-Allow-Credentials", "true");
-    res.setHeader("Access-Control-Max-Age", "1800");
-    res.setHeader("Access-Control-Allow-Headers", "content-type");
-    res.setHeader( "Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, PATCH, OPTIONS" ); 
-    const pool = new Pool(dbCredentials);
-    const student = req.params.student;
-    const interviewerID = parseInt(req.params.interviewerID);
-    const appointmentID = parseInt(req.params.appointmentID);
+   const  addInterview=(socket)=>{
+    socket.on("appointments",(data)=>{
 
-    pool.query("INSERT INTO  interviewID(student, interviewer_id, appointment_id) VALUES($1,$2,$3)", [student, interviewerID, appointmentID])
-    .then((result)=>result.rows)
-     .then(()=> showInterviews())
-     .catch((err)=>console.log(err))
-     .finally(()=>pool.end);
+        const pool = new Pool(dbCredentials);
+        const interviews=Object.values(data);
+        interviews.forEach((item)=>{
+            if(item.interview != undefined){
+                const id=item
+                const student =item.interview.student ;
+                const interviewerID = item.interview.interviewer.id;
+                const appointmentID = item.id;
+            
+                pool.query("INSERT INTO  interviews(id,student, interviewer_id, appointment_id) VALUES($1,$2,$3)", [student, interviewerID, appointmentID])
+                .then((result)=>result.rows)
+                 .then(()=> showInterviews())
+                 .catch((err)=>console.log(err))
+                 .finally(()=>pool.end);
+            }
+        })
+
+    })
+
     }
 
 
@@ -115,12 +121,6 @@ const  showInterviews=(req,res)=>{
         .catch((err)=>console.log(err))
         .finally(()=>pool.end);
         }
-        
-     const testing=(socket)=>{
-        socket.on("appointments",(data)=>{
-            console.log(data)
-        })
-     }
     
 
     module.exports={
@@ -128,7 +128,6 @@ const  showInterviews=(req,res)=>{
         addInterview,
         editInterview,
         deleteInterview,
-        testing
     }
 
     

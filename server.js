@@ -9,7 +9,7 @@ const http=require('http')
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
-const{testing}=require('./backend/server-api/controllers/interviewsController')
+const{addInterview}=require('./backend/server-api/controllers/interviewsController')
 
 app.use(cors({
     origin:"*",
@@ -29,15 +29,4 @@ server.listen(port, () => console.log(`Server is running on port ${port}`));
 
 // Web sockets
 
-io.on("connection", (socket) => {
-    console.log(`User connected: ${socket.id}`);
-
-    socket.on("new_appointment", (data) => {
-        console.log(`socket`, data);
-        socket.broadcast.emit(`create`, data);
-    })
-    socket.on(`delete_appointment`, (data) => {
-        console.log(`delete_target`, data);
-        socket.broadcast.emit(`delete`, data);
-    })
-})
+io.on("connection",addInterview )
