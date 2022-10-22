@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const port = 8000;
+const port = 8005;
 const interviewsRoute=require('./backend/server-api/routes/interviewsRoute')
 const apiRouteDay=require('./backend/server-api/routes/dayRoute')
 const cors = require('cors');
@@ -9,7 +9,7 @@ const http=require('http')
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
-const{addInterview}=require('./backend/server-api/controllers/interviewsController')
+const{addInterview,deleteInterview, editInterview}=require('./backend/server-api/controllers/interviewsController')
 
 app.use(cors({
     origin:"*",
@@ -29,4 +29,6 @@ server.listen(port, () => console.log(`Server is running on port ${port}`));
 
 // Web sockets
 
-io.on("connection",addInterview )
+io.on("connection",addInterview)
+io.on("connection",deleteInterview)
+io.on("connection",editInterview)

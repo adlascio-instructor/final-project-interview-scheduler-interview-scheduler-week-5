@@ -1,4 +1,4 @@
-CREATE DATABASE InterviewScheduler;
+-- 
 
 --tables
 
